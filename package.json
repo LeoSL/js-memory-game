@@ -1,0 +1,24 @@
+{
+  "name": "js-memory-game",
+  "version": "1.0.0",
+  "description": "'Memory Game by LeoSL'",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeoSL/js-memory-game.git"
+  },
+  "keywords": [
+    "js"
+  ],
+  "author": "LeoSL",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LeoSL/js-memory-game/issues"
+  },
+  "homepage": "https://github.com/LeoSL/js-memory-game#readme",
+  "devDependencies": {
+    "eslint": "^4.14.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0"
+  }
+}
