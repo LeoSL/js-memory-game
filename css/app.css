@@ -81,6 +81,23 @@ h1 {
     font-size: 33px;
 }
 
+.deck .card.no-match {
+    cursor: default;
+    background: #ee3b3b;
+    font-size: 33px;
+}
+
+.deck .card.matched {
+    cursor: default;
+    background: #06c792;
+    font-size: 33px;
+}
+
+.deck .card.expand {
+    -webkit-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    transform: scale(1.2);
+}
 /*
  * Styles for the Score Panel
  */
