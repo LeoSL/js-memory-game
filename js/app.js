@@ -3,7 +3,6 @@
 /* globals window document localStorage */
 
 // SHUFFLE FUNCTION //
-
 /*
  * Create a list that holds all of your cards
  */
@@ -33,11 +32,9 @@ function shuffle(array) { // eslint-disable-line no-unused-vars
 
   return shuffledArray;
 }
-
 //
 
 // MATH UTILS COMPONENT //
-
 const MathUtils = class MathUtils {
   static getRandomInt(minNumber, maxNumber) {
     const min = Math.ceil(minNumber);
@@ -49,11 +46,9 @@ const MathUtils = class MathUtils {
     return Math.round(Math.random() * 10000);
   }
 };
-
 //
 
 // CARD STYLE LIST COMPONENT //
-
 const CardStylelist = [
   'fa-diamond',
   'fa-paper-plane-o',
@@ -64,11 +59,9 @@ const CardStylelist = [
   'fa-bicycle',
   'fa-bomb',
 ];
-
 //
 
 // CARD COMPONENT //
-
 const Card = class Card {
   constructor(cardId, cardStyle, cardStyleId) {
     this.cardId = cardId || MathUtils.getRandomCardId();
@@ -92,7 +85,6 @@ const Card = class Card {
 
 
 // DECK COMPONENT //
-
 const Deck = class Deck {
   constructor(dimension) {
     this.deckWidth = dimension || 4;
@@ -384,19 +376,19 @@ const App = {
     };
   },
 
-  endGame: function endGame() {
-    document.getElementById('card-deck').remove();
-    document.getElementById('elapsed-time').remove();
-    document.getElementById('stars-line').remove();
-    window.MemoryGameCounters = {};
-  },
-
   bindRestart: function bindRestart() {
     const restartIcon = document.getElementById('restart-game');
     restartIcon.addEventListener('click', () => {
       App.endGame();
       App.startGame();
     });
+  },
+
+  endGame: function endGame() {
+    document.getElementById('card-deck').remove();
+    document.getElementById('elapsed-time').remove();
+    document.getElementById('stars-line').remove();
+    window.MemoryGameCounters = {};
   },
 
   startGame: function startGame() {
