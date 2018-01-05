@@ -1,38 +1,6 @@
 /* eslint-disable prefer-rest-params */
 
-/* globals window document localStorage */
-
-// SHUFFLE FUNCTION //
-/*
- * Create a list that holds all of your cards
- */
-
-
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
-
-// Shuffle function from http://stackoverflow.com/a/2450976
-function shuffle(array) { // eslint-disable-line no-unused-vars
-  const shuffledArray = array;
-  let currentIndex = array.length;
-  let temporaryValue;
-  let randomIndex;
-
-  while (currentIndex !== 0) {
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-    temporaryValue = array[currentIndex];
-    shuffledArray[currentIndex] = shuffledArray[randomIndex];
-    shuffledArray[randomIndex] = temporaryValue;
-  }
-
-  return shuffledArray;
-}
-//
+/* globals window document localStorage CustomEvent */
 
 // MATH UTILS COMPONENT //
 const MathUtils = class MathUtils {
@@ -83,6 +51,33 @@ const Card = class Card {
 };
 //
 
+// SHUFFLE FUNCTION from http://stackoverflow.com/a/2450976 (ES6 converted) //
+/*
+ * Create a list that holds all of your cards
+ */
+
+
+/*
+ * Display the cards on the page
+ *   - shuffle the list of cards using the provided "shuffle" method below
+ */
+const shuffle = (array) => { // eslint-disable-line no-unused-vars
+  const shuffledArray = array;
+  let currentIndex = array.length;
+  let temporaryValue;
+  let randomIndex;
+
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+    temporaryValue = array[currentIndex];
+    shuffledArray[currentIndex] = shuffledArray[randomIndex];
+    shuffledArray[randomIndex] = temporaryValue;
+  }
+
+  return shuffledArray;
+};
+//
 
 // DECK COMPONENT //
 const Deck = class Deck {
@@ -130,123 +125,29 @@ const Deck = class Deck {
     });
   }
 };
-
 //
-
-// COUNTERS COMPONENTS //
-const Timer = class Timer {
-  constructor() {
-    this.begins = new Date().getTime();
-    this.elapsed = '0.0';
-  }
-
-  render() {
-    const scorePanel = document.getElementById('score-panel-section');
-    const timerElement = document.createElement('span');
-    let time;
-
-    timerElement.setAttribute('id', 'elapsed-time');
-    scorePanel.append(timerElement);
-
-    window.setInterval(() => {
-      time = new Date().getTime() - this.begins;
-
-      this.elapsed = Math.floor(time / 100) / 10;
-
-      if (Math.round(this.elapsed) === this.elapsed) this.elapsed += '.0';
-
-      timerElement.textContent = this.elapsed;
-    }, 100);
-  }
-};
-
-const MovesCounter = class MovesCounter {
-  constructor() {
-    this.moves = 0;
-  }
-
-  increment() {
-    this.moves += 1;
-    this.render();
-  }
-
-  render() {
-    const movesCounterElement = document.getElementById('moves-counter');
-    movesCounterElement.textContent = this.moves;
-  }
-};
-
-const StarCounter = class StarCounter {
-  constructor() {
-    this.stars = 3;
-  }
-
-  static decreaseStarElement() {
-    const stars = document.getElementsByClassName('fa-star');
-    const star = stars[(stars.length - 1)];
-    star.setAttribute('class', 'fa fa-star-o');
-  }
-
-  checkStarRating() {
-    const counters = window.MemoryGameCounters;
-    if (this.stars > 0 && (counters.moveCount.moves % 4) === 0) {
-      this.stars -= 1;
-      StarCounter.decreaseStarElement();
-    }
-  }
-
-  static createStarElement() {
-    const starLi = document.createElement('li');
-    const starItem = document.createElement('i');
-    starItem.setAttribute('class', 'fa fa-star');
-    starLi.append(starItem);
-
-    document.getElementById('stars-line').append(starLi);
-  }
-
-  static createStarLineDOMElement() {
-    const movesCounter = document.getElementById('moves-counter');
-    const cardDeckElement = document.createElement('ul');
-    cardDeckElement.setAttribute('id', 'stars-line');
-    cardDeckElement.setAttribute('class', 'stars');
-
-    document.getElementById('score-panel-section').insertBefore(cardDeckElement, movesCounter);
-  }
-
-  render() {
-    let counter = 0;
-    StarCounter.createStarLineDOMElement();
-
-    while (counter < this.stars) {
-      StarCounter.createStarElement();
-      counter += 1;
-    }
-  }
-};
-
-const Counters = {
-  startTimer: function startTimer() {
-    const timer = new Timer();
-    timer.render();
-    return timer;
-  },
-
-  startMoveCount: function startMoveCount() {
-    const movesCounter = new MovesCounter();
-    movesCounter.render();
-    return movesCounter;
-  },
-
-  startStarCounter: function startStarCounter() {
-    const starCounter = new StarCounter();
-    starCounter.render();
-    return starCounter;
-  },
-};
-//
-
 
 // GAME ACTION //
+
+const setItemInLocalStorage = (cardId) => {
+  let id = cardId;
+  let localStorageKey = 'card2';
+  let localStorageValues = [];
+  const copyCat = id.match('-match') || false;
+
+  if (localStorage.getItem('card1') === null) localStorageKey = 'card1';
+
+  if (copyCat) id = id.replace('-match', '');
+
+  localStorageValues = [cardId, id];
+
+  localStorage.setItem(localStorageKey, localStorageValues);
+};
+
+const checkIfUserWon = () => {
+  window.MemoryGameCounters.cardCounter.checkMatchedCardsCount();
+};
+
 const CardActions = class CardActions {
   constructor() {
     this.cards = Array.from(document.getElementsByClassName('card'));
@@ -259,80 +160,80 @@ const CardActions = class CardActions {
   }
 
   static hideCard() {
-    arguments[0].setAttribute('class', 'card');
+    const cardToHide = arguments[0]; // 'arguments' var. available by setTimeout() callback function
+    cardToHide.setAttribute('class', 'card');
   }
 
-  static setItemInLocalStorage(cardId) {
-    let id = cardId;
-    const copyCat = id.match('-match');
-
-    if (copyCat !== null && copyCat.length > 0) {
-      id = id.replace('-match', '');
-    }
-
-    localStorage.setItem(cardId, id);
+  static shrinkCard() {
+    const cardToShrink = arguments[0];
+    cardToShrink.classList.remove('expand');
   }
 
   static pickCard(card) {
     const cardId = card.id;
     CardActions.showCard(card);
-    CardActions.setItemInLocalStorage(cardId);
+    setItemInLocalStorage(cardId);
   }
 
-  static setTransitionAttributes(id, cardClasses) {
+  static setCardTransitionAttributes(id, cardClasses) {
     const card = document.getElementById(id);
-    card.setAttribute('class', `${card.getAttribute('class')} ${cardClasses}`);
+    cardClasses.forEach(cardClass => card.classList.add(cardClass));
   }
 
-  static setWrongMatchAnimation(id) {
+  static setCardNoMatchAnimation(id) {
     const card = document.getElementById(id);
-    const cardClasses = 'no-match expand';
+    const cardClasses = ['no-match', 'expand'];
 
-    CardActions.setTransitionAttributes(id, cardClasses);
+    CardActions.setCardTransitionAttributes(id, cardClasses);
     window.setTimeout(CardActions.hideCard, 700, card);
   }
 
-  static triggerWrongMatchAnimation() {
-    CardActions.setWrongMatchAnimation(this.card1.key);
-    CardActions.setWrongMatchAnimation(this.card2.key);
+  static noMatch() {
+    CardActions.setCardNoMatchAnimation(this.card1.key);
+    CardActions.setCardNoMatchAnimation(this.card2.key);
     window.MemoryGameCounters.starCount.checkStarRating();
   }
 
-  static addMatchColor(id) {
-    const cardClasses = 'matched';
-    CardActions.setTransitionAttributes(id, cardClasses);
+  static addCardMatchColor(id) {
+    const cardClasses = ['matched', 'expand'];
+    CardActions.setCardTransitionAttributes(id, cardClasses);
+    window.setTimeout(CardActions.shrinkCard, 700, document.getElementById(id));
   }
 
   static weHaveAmatch() {
-    CardActions.addMatchColor(this.card1.key);
-    CardActions.addMatchColor(this.card2.key);
+    CardActions.addCardMatchColor(this.card1.key);
+    CardActions.addCardMatchColor(this.card2.key);
+    checkIfUserWon();
   }
 
-  static resolveCards(isEqualMatch) {
-    isEqualMatch ? CardActions.weHaveAmatch() : CardActions.triggerWrongMatchAnimation();
-    localStorage.removeItem(this.card1.key);
-    localStorage.removeItem(this.card2.key);
+  static resolveCards(isAMatch) {
+    const doWeHaveAmatch = isAMatch;
+    doWeHaveAmatch ? CardActions.weHaveAmatch() : CardActions.noMatch();
+    localStorage.removeItem('card1');
+    localStorage.removeItem('card2');
   }
 
   static compareCards() {
-    let cards = [];
-    let isEqualMatch;
+    let card1Values = localStorage.getItem('card1');
+    let card2Values = localStorage.getItem('card2');
+    let isAMatch;
 
-    if (localStorage.length === 2) {
-      cards = Object.keys(localStorage);
+    if (card1Values && card2Values) {
+      card1Values = card1Values.split(',');
+      card2Values = card2Values.split(',');
 
       this.card1 = {
-        key: cards[0],
-        value: localStorage.getItem(cards[0]),
+        key: card1Values[0],
+        value: card1Values[1],
       };
 
       this.card2 = {
-        key: cards[1],
-        value: localStorage.getItem(cards[1]),
+        key: card2Values[0],
+        value: card2Values[1],
       };
 
-      isEqualMatch = (this.card1.value === this.card2.value);
-      CardActions.resolveCards(isEqualMatch);
+      isAMatch = (this.card1.value === this.card2.value);
+      CardActions.resolveCards(isAMatch);
     }
   }
 
@@ -342,7 +243,6 @@ const CardActions = class CardActions {
     if (cardIsHidden) {
       CardActions.pickCard(this);
       window.MemoryGameCounters.moveCount.increment();
-
       CardActions.compareCards();
     }
   }
@@ -355,12 +255,25 @@ const CardActions = class CardActions {
 };
 //
 
+// COUNTERS (Star Rating, Timer and Moves Count) EVENT HANDLER //
+const triggerCountersEvent = (eventType, detail) => {
+  const countersEvent = new CustomEvent(eventType, detail);
+  document.dispatchEvent(countersEvent);
+};
+//
+
 // MAIN APP COMPONENT //
 const App = {
+  initCounters: function initCounters(deckCardsNumber) {
+    const detail = { detail: { deckCount: deckCardsNumber } };
+    triggerCountersEvent('initCounters', detail);
+  },
+
   initDeck: function initDeck() {
     const deck = new Deck();
     deck.buildDeck();
     deck.render();
+    App.initCounters(deck.cardDeck.length);
   },
 
   bindCards: function bindCards() {
@@ -368,36 +281,43 @@ const App = {
     cardActions.bindCardActions();
   },
 
-  initCounters: function initCounters() {
-    window.MemoryGameCounters = {
-      timer: Counters.startTimer(),
-      moveCount: Counters.startMoveCount(),
-      starCount: Counters.startStarCounter(),
-    };
-  },
-
   bindRestart: function bindRestart() {
-    const restartIcon = document.getElementById('restart-game');
-    restartIcon.addEventListener('click', () => {
-      App.endGame();
-      App.startGame();
+    const restartElements = document.getElementsByClassName('restart');
+
+    Array.from(restartElements).forEach((restartElement) => {
+      restartElement.addEventListener('click', () => {
+        App.endGame();
+        App.startGame();
+      });
     });
   },
 
-  endGame: function endGame() {
+  endCounters: function endCounters() {
+    triggerCountersEvent('endCounters');
+  },
+
+  removeDOMElements: function removeDOMElements() {
     document.getElementById('card-deck').remove();
-    document.getElementById('elapsed-time').remove();
+    document.getElementById('elapsed-time-counter').remove();
     document.getElementById('stars-line').remove();
-    window.MemoryGameCounters = {};
   },
 
   startGame: function startGame() {
     App.initDeck();
     App.bindCards();
-    App.initCounters();
     App.bindRestart();
+  },
+
+  endGame: function endGame() {
+    App.endCounters();
+    App.removeDOMElements();
   },
 };
 //
 
 App.startGame();
+
+// TO-DO
+// [X] Rearrange elements in the top (counters and restart)
+// [ ] Implement YOU WON! behavior and total scores (time and stars) - implement a localStorage register to have a game history
+// [X] Fix the localStorage count (we cant trust in localStorage.length === 2) :(
