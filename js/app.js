@@ -61,7 +61,7 @@ const Card = class Card {
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
  */
-const shuffle = (array) => { // eslint-disable-line no-unused-vars
+const shuffle = (array) => {
   const shuffledArray = array;
   let currentIndex = array.length;
   let temporaryValue;
@@ -144,6 +144,11 @@ const setItemInLocalStorage = (cardId) => {
   localStorage.setItem(localStorageKey, localStorageValues);
 };
 
+const clearLocalStorage = () => {
+  localStorage.removeItem('card1');
+  localStorage.removeItem('card2');
+};
+
 const checkIfUserWon = () => {
   window.MemoryGameCounters.cardCounter.checkMatchedCardsCount();
 };
@@ -208,9 +213,8 @@ const CardActions = class CardActions {
 
   static resolveCards(isAMatch) {
     const doWeHaveAmatch = isAMatch;
-    doWeHaveAmatch ? CardActions.weHaveAmatch() : CardActions.noMatch();
-    localStorage.removeItem('card1');
-    localStorage.removeItem('card2');
+    doWeHaveAmatch ? CardActions.weHaveAmatch() : CardActions.noMatch(); // eslint-disable-line no-unused-expressions
+    clearLocalStorage();
   }
 
   static compareCards() {
@@ -282,13 +286,12 @@ const App = {
   },
 
   bindRestart: function bindRestart() {
-    const restartElements = document.getElementsByClassName('restart');
+    const restartElement = document.getElementById('restart-game');
 
-    Array.from(restartElements).forEach((restartElement) => {
-      restartElement.addEventListener('click', () => {
-        App.endGame();
-        App.startGame();
-      });
+    restartElement.addEventListener('click', () => {
+      App.endGame();
+      clearLocalStorage();
+      App.startGame();
     });
   },
 
@@ -316,8 +319,3 @@ const App = {
 //
 
 App.startGame();
-
-// TO-DO
-// [X] Rearrange elements in the top (counters and restart)
-// [ ] Implement YOU WON! behavior and total scores (time and stars) - implement a localStorage register to have a game history
-// [X] Fix the localStorage count (we cant trust in localStorage.length === 2) :(
