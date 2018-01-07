@@ -22,7 +22,7 @@ const Timer = class Timer {
 
       if (Math.round(this.elapsed) === this.elapsed) this.elapsed += '.0';
 
-      timerElement.textContent = this.elapsed;
+      timerElement.textContent = Math.trunc(this.elapsed);
     }, 100);
   }
 };
