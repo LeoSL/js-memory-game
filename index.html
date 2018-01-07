@@ -13,24 +13,19 @@
   <body>
     <div class="modal fade" id="you-won-modal" tabindex="-1" role="dialog" aria-labelledby="you-won-modal" aria-hidden="true">
       <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h2 class="modal-title" id="myModalLabel">You won!</h2>
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          </div>
+        <div class="modal-content you-won-modal">
+          <h2 class="title" id="myModalLabel">You won!</h2>
           <div class="modal-body">
-            <h4>Congratulations!</h4>
-            You have improved your memory skills by 1,0345%!
+            <img class="trophy-img" src="img/trophy.png" alt="1st place trophy">
+            <p>You have improved your memory skills by 1,0345%!</p>
             <p>(font: ACME Ltda.)</p>
             <hr>
-            Here's you score:
+            <p><strong>Here's you score:</strong></p>
             <div id="score-resume" class="container">
-              <div class="row">
-                <div class="col">
-                  Star rating
-                </div>
-                <div class="col">12 Moves</div>
-                <div class="col">in 2min 40s</div>
+              <div class="row score-row">
+                <div id="modal-total-moves" class="col">Moves</div>
+                <div id="modal-star-rating" class="col">Star rating</div>
+                <div id="modal-total-time"  class="col">in 2min 40s</div>
               </div>
             </div>
           </div>
@@ -46,12 +41,15 @@
       <div id="score-panel-section" class="score-panel row">
         <div class="col-4">
           <div id="star-line-moves-div" class="inline">
-            <span id="moves-counter" class="moves"></span>
+            <span id="moves-counter" data-moves="0" class="moves"></span>
           </div>
         </div>
 
         <div class="col-4">
-          Time Elapsed: <div id="time-elapsed" class="inline"></div>
+          <div class="row timelapsed">
+            <div class="col-8 pull-right">Time elapsed:</div>
+            <div id="time-elapsed" class="col-4 pull-left"></div>
+          </div>
         </div>
 
         <div class="col-4">

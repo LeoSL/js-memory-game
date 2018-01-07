@@ -98,6 +98,7 @@ h1 {
   -ms-transform: scale(1.2);
   transform: scale(1.2);
 }
+
 /*
  * Styles for the Score Panel
  */
@@ -127,4 +128,54 @@ h1 {
 
 .score-panel .inline {
   display: inline;
+}
+
+.timelapsed .pull-right {
+  padding: 0px;
+  text-align: right;
+}
+
+.timelapsed .pull-left {
+  text-align: left;
+}
+
+/*
+ * Styles for the You Won! modal
+ */
+
+.you-won-modal {
+  text-align: center;
+}
+
+.you-won-modal .title {
+  margin: 15px;
+}
+
+@keyframes fade-in {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+@-webkit-keyframes fade-in {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+.fade-in {
+  -webkit-animation-duration: 3s;
+  animation-duration: 3s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-name: fade-in;
+  animation-name: fade-in;
+}
+
+.you-won-modal .trophy-img {
+  opacity: 0;
+  max-width: 200px;
+  margin-bottom: 20px;
+}
+
+.score-row {
+  width: 100%;
 }
