@@ -131,11 +131,11 @@ const Deck = class Deck {
 
 const setItemInLocalStorage = (cardId) => {
   let id = cardId;
-  let localStorageKey = 'card2';
+  let localStorageKey = 'leoSLMemoryGamecard2';
   let localStorageValues = [];
   const copyCat = id.match('-match') || false;
 
-  if (localStorage.getItem('card1') === null) localStorageKey = 'card1';
+  if (localStorage.getItem('leoSLMemoryGamecard1') === null) localStorageKey = 'leoSLMemoryGamecard1';
 
   if (copyCat) id = id.replace('-match', '');
 
@@ -145,8 +145,8 @@ const setItemInLocalStorage = (cardId) => {
 };
 
 const clearLocalStorage = () => {
-  localStorage.removeItem('card1');
-  localStorage.removeItem('card2');
+  localStorage.removeItem('leoSLMemoryGamecard1');
+  localStorage.removeItem('leoSLMemoryGamecard2');
 };
 
 const checkIfUserWon = () => {
@@ -218,8 +218,8 @@ const CardActions = class CardActions {
   }
 
   static compareCards() {
-    let card1Values = localStorage.getItem('card1');
-    let card2Values = localStorage.getItem('card2');
+    let card1Values = localStorage.getItem('leoSLMemoryGamecard1');
+    let card2Values = localStorage.getItem('leoSLMemoryGamecard2');
     let isAMatch;
 
     if (card1Values && card2Values) {
