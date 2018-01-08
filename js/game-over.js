@@ -1,9 +1,3 @@
-// TO-DO : EventListener to show modal and Game Score
-// dispatchEvent to App.endGame() when modal is shown
-// click restartGame button when [RESTART] modal button is clicked (maybe bind through classes)
-// stop timer when game is finished
-//
-
 /* globals jQuery window document */
 
 const $ = jQuery;
