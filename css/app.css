@@ -33,12 +33,17 @@ h1 {
   font-weight: 300;
 }
 
+header {
+  margin-top: 1em;
+}
+
 /*
  * Styles for the deck of cards
  */
 
 .deck {
   width: 660px;
+  max-width: 100%;
   min-height: 680px;
   background: linear-gradient(160deg, #02ccba 0%, #aa7ecd 100%);
   padding: 32px;
@@ -46,12 +51,14 @@ h1 {
   box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, 0.5);
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   margin: 0 0 3em;
 }
 
 .deck .card {
+  max-width: 100%;
+  margin-bottom: 10px;
   height: 125px;
   width: 125px;
   background: #2e3d49;
@@ -105,7 +112,9 @@ h1 {
 
 .score-panel {
   text-align: center;
-  width: 60%;
+  font-size: larger;
+  width: 660px;
+  max-width: 100%;
   margin: 15px 0 10px 0;
 }
 
@@ -116,7 +125,7 @@ h1 {
   margin: 0 5px 0 0;
 }
 
-.score-panel .stars li {
+.stars li {
   list-style: none;
   display: inline-block;
 }
