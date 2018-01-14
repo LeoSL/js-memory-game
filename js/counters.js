@@ -5,6 +5,7 @@ const Timer = class Timer {
   constructor() {
     this.begins = new Date().getTime();
     this.elapsed = '0.0';
+    this.gameOver = false;
   }
 
   render() {
@@ -16,13 +17,15 @@ const Timer = class Timer {
     document.getElementById('time-elapsed').append(timerElement);
 
     window.setInterval(() => {
-      time = new Date().getTime() - this.begins;
+      if (this.gameOver === false) {
+        time = new Date().getTime() - this.begins;
 
-      this.elapsed = Math.floor(time / 100) / 10;
+        this.elapsed = Math.floor(time / 100) / 10;
 
-      if (Math.round(this.elapsed) === this.elapsed) this.elapsed += '.0';
+        if (Math.round(this.elapsed) === this.elapsed) this.elapsed += '.0';
 
-      timerElement.textContent = Math.trunc(this.elapsed);
+        timerElement.textContent = Math.trunc(this.elapsed);
+      }
     }, 100);
   }
 };
@@ -48,17 +51,17 @@ const StarCounter = class StarCounter {
     this.stars = 3;
   }
 
-  static decreaseStarElement() {
-    const stars = document.getElementsByClassName('fa-star');
+  static decreaseStarElement(className) {
+    const stars = document.getElementsByClassName(className);
     const star = stars[(stars.length - 1)];
     star.setAttribute('class', 'fa fa-star-o');
   }
 
   checkStarRating() {
     const counters = window.MemoryGameCounters;
-    if (this.stars > 0 && (counters.moveCount.moves % 4) === 0) {
+    if (this.stars > 1 && (counters.moveCount.moves % 8) === 0) {
       this.stars -= 1;
-      StarCounter.decreaseStarElement();
+      StarCounter.decreaseStarElement('fa-star');
     }
   }
 
@@ -66,7 +69,7 @@ const StarCounter = class StarCounter {
     const ulStarLine = document.createElement('ul');
     ulStarLine.setAttribute('id', 'stars-line');
     ulStarLine.setAttribute('class', 'stars');
-    document.getElementById('star-line-moves-div').append(ulStarLine);
+    return ulStarLine;
   }
 
   static createStarElement() {
@@ -74,17 +77,19 @@ const StarCounter = class StarCounter {
     const starItem = document.createElement('i');
     starItem.setAttribute('class', 'fa fa-star');
     starLi.append(starItem);
-
-    document.getElementById('stars-line').append(starLi);
+    return starLi;
   }
 
   render() {
     let counter = 0;
+    const starLine = StarCounter.createStarLineDOMElement();
+    let star;
 
-    StarCounter.createStarLineDOMElement();
+    document.getElementById('star-line-moves-div').append(starLine);
 
     while (counter < this.stars) {
-      StarCounter.createStarElement();
+      star = StarCounter.createStarElement();
+      document.getElementById('stars-line').append(star);
       counter += 1;
     }
   }
@@ -97,12 +102,15 @@ const CardCounter = class CardCounter {
   }
 
   checkMatchedCardsCount() {
+    let gameOver = false;
     let endGameEvent;
     this.matchedCards = document.getElementsByClassName('card open show matched').length;
     if (this.matchedCards === this.deckCardCount) {
       endGameEvent = new CustomEvent('memoryGameOver');
       document.dispatchEvent(endGameEvent);
+      gameOver = true;
     }
+    return gameOver;
   }
 };
 

@@ -1,4 +1,4 @@
-/* globals jQuery window document */
+/* globals jQuery window document StarCounter */
 
 const $ = jQuery;
 

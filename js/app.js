@@ -150,7 +150,8 @@ const clearLocalStorage = () => {
 };
 
 const checkIfUserWon = () => {
-  window.MemoryGameCounters.cardCounter.checkMatchedCardsCount();
+  const gameOver = window.MemoryGameCounters.cardCounter.checkMatchedCardsCount();
+  window.MemoryGameCounters.timer.gameOver = gameOver;
 };
 
 const CardActions = class CardActions {
