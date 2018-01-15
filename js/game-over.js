@@ -26,6 +26,26 @@ const GameOver = {
     return convertedTime;
   },
 
+  buildStarRating: function buildStarRating(starRating) {
+    const starLine = StarCounter.createStarLineDOMElement();
+    let counter = 0;
+    let star;
+
+    [1, 2, 3].forEach(() => {
+      star = StarCounter.createStarElement();
+      star.firstChild.classList.add('modal-stars');
+      starLine.appendChild(star);
+    });
+
+    starLine.classList.add('modal-star-line');
+    $('#modal-star-rating').append(starLine);
+
+    while (counter < 3 - starRating) {
+      StarCounter.decreaseStarElement('modal-stars');
+      counter += 1;
+    }
+  },
+
   populateModalData: function populateModalData() {
     const totalMoves = window.MemoryGameCounters.moveCount.moves;
     const totalTime = window.MemoryGameCounters.timer.elapsed;
@@ -33,17 +53,22 @@ const GameOver = {
 
     $('#modal-total-moves').text(`${totalMoves} Moves`);
     $('#modal-total-time').text(`in ${GameOver.transformTotalTime(totalTime)}`);
-    $('#modal-star-rating').text(`Star rating: ${starRating}`);
+    GameOver.buildStarRating(starRating);
   },
 
   fadeInTrophy: function fadeInTrophy() {
     $('.trophy-img').addClass('fade-in');
   },
 
+  toggleModal: function toggleModal() {
+    $('#you-won-modal').modal('toggle');
+  },
+
   youWon: function youWon() {
     GameOver.populateModalData();
-    $('#you-won-modal').modal('toggle');
+    GameOver.toggleModal();
     window.setTimeout(GameOver.fadeInTrophy, 300);
+    $('#modal-cancel').on('click', GameOver.toggleModal);
   },
 };
 

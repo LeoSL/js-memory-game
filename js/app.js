@@ -1,6 +1,6 @@
 /* eslint-disable prefer-rest-params */
 
-/* globals window document localStorage CustomEvent */
+/* globals window document localStorage CustomEvent jQuery */
 
 // MATH UTILS COMPONENT //
 const MathUtils = class MathUtils {
@@ -287,12 +287,15 @@ const App = {
   },
 
   bindRestart: function bindRestart() {
-    const restartElement = document.getElementById('restart-game');
+    const restartElements = Array.from(document.getElementsByClassName('restart-game'));
 
-    restartElement.addEventListener('click', () => {
-      App.endGame();
-      clearLocalStorage();
-      App.startGame();
+    restartElements.forEach((element) => {
+      element.addEventListener('click', () => {
+        App.endGame();
+        clearLocalStorage();
+        App.startGame();
+        if (element.id === 'play-again-modal') jQuery('#you-won-modal').modal('toggle');
+      });
     });
   },
 

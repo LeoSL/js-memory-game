@@ -130,6 +130,10 @@ header {
   display: inline-block;
 }
 
+.modal-star-line {
+  padding-left: 0;
+}
+
 .score-panel .restart {
   margin-left: 45px;
   cursor: pointer;
@@ -187,4 +191,18 @@ header {
 
 .score-row {
   width: 100%;
+}
+
+.play-again-btn {
+  cursor: pointer;
+  color: #fff;
+  background-color: #4cabb3;
+  border-color: #4cabb3;
+}
+
+.close-btn {
+  cursor: pointer;
+  color: #fff;
+  background-color: #b6bbbf;
+  border-color: #b6bbbf;
 }
