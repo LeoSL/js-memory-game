@@ -59,7 +59,8 @@ const StarCounter = class StarCounter {
 
   checkStarRating() {
     const counters = window.MemoryGameCounters;
-    if (this.stars > 1 && (counters.moveCount.moves % 8) === 0) {
+
+    if (counters.moveCount.moves > 0 && this.stars > 1 && (counters.moveCount.moves % 8) === 0) {
       this.stars -= 1;
       StarCounter.decreaseStarElement('fa-star');
     }
@@ -83,13 +84,14 @@ const StarCounter = class StarCounter {
   render() {
     let counter = 0;
     const starLine = StarCounter.createStarLineDOMElement();
+    const starLineMovesDiv = document.getElementById('star-line-moves-div');
     let star;
 
-    document.getElementById('star-line-moves-div').append(starLine);
+    starLineMovesDiv.append(starLine);
 
     while (counter < this.stars) {
       star = StarCounter.createStarElement();
-      document.getElementById('stars-line').append(star);
+      starLineMovesDiv.lastChild.append(star);
       counter += 1;
     }
   }
@@ -105,7 +107,7 @@ const CardCounter = class CardCounter {
     let gameOver = false;
     let endGameEvent;
     this.matchedCards = document.getElementsByClassName('card open show matched').length;
-    if (this.matchedCards === this.deckCardCount) {
+    if (this.matchedCards === Number(this.deckCardCount)) {
       endGameEvent = new CustomEvent('memoryGameOver');
       document.dispatchEvent(endGameEvent);
       gameOver = true;

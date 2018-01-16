@@ -127,8 +127,20 @@ const Deck = class Deck {
 };
 //
 
-// GAME ACTION //
+// COUNTERS (Star Rating, Timer and Moves Count) EVENT HANDLER //
+const triggerCountersEvent = (eventType, detail) => {
+  const countersEvent = new CustomEvent(eventType, detail);
+  document.dispatchEvent(countersEvent);
+};
 
+
+const initCounters = (deckCardsNumber) => {
+  const detail = { detail: { deckCount: deckCardsNumber } };
+  triggerCountersEvent('initCounters', detail);
+};
+//
+
+// GAME ACTION //
 const setItemInLocalStorage = (cardId) => {
   let id = cardId;
   let localStorageKey = 'leoSLMemoryGamecard2';
@@ -152,6 +164,13 @@ const clearLocalStorage = () => {
 const checkIfUserWon = () => {
   const gameOver = window.MemoryGameCounters.cardCounter.checkMatchedCardsCount();
   window.MemoryGameCounters.timer.gameOver = gameOver;
+};
+
+const isTheFirstMove = () => localStorage.getItem('leoSLmemoryGameFirstMove');
+
+const initGameCounter = () => {
+  initCounters(localStorage.getItem('leoSLdeckCardLength'));
+  localStorage.setItem('leoSLmemoryGameFirstMove', false);
 };
 
 const CardActions = class CardActions {
@@ -224,6 +243,8 @@ const CardActions = class CardActions {
     let isAMatch;
 
     if (card1Values && card2Values) {
+      window.MemoryGameCounters.moveCount.increment();
+
       card1Values = card1Values.split(',');
       card2Values = card2Values.split(',');
 
@@ -246,8 +267,8 @@ const CardActions = class CardActions {
     const cardIsHidden = !this.classList.contains('open');
 
     if (cardIsHidden) {
+      if (isTheFirstMove() === 'true') initGameCounter();
       CardActions.pickCard(this);
-      window.MemoryGameCounters.moveCount.increment();
       CardActions.compareCards();
     }
   }
@@ -260,25 +281,13 @@ const CardActions = class CardActions {
 };
 //
 
-// COUNTERS (Star Rating, Timer and Moves Count) EVENT HANDLER //
-const triggerCountersEvent = (eventType, detail) => {
-  const countersEvent = new CustomEvent(eventType, detail);
-  document.dispatchEvent(countersEvent);
-};
-//
-
 // MAIN APP COMPONENT //
 const App = {
-  initCounters: function initCounters(deckCardsNumber) {
-    const detail = { detail: { deckCount: deckCardsNumber } };
-    triggerCountersEvent('initCounters', detail);
-  },
-
   initDeck: function initDeck() {
     const deck = new Deck();
     deck.buildDeck();
     deck.render();
-    App.initCounters(deck.cardDeck.length);
+    localStorage.setItem('leoSLdeckCardLength', deck.cardDeck.length);
   },
 
   bindCards: function bindCards() {
@@ -287,14 +296,14 @@ const App = {
   },
 
   bindRestart: function bindRestart() {
-    const restartElements = Array.from(document.getElementsByClassName('restart-game'));
+    const elements = Array.from(document.getElementsByClassName('restart-game'));
 
-    restartElements.forEach((element) => {
+    elements.forEach((element) => {
       element.addEventListener('click', () => {
+        if (element.id === 'play-again-modal') jQuery('#you-won-modal').modal('toggle');
         App.endGame();
         clearLocalStorage();
         App.startGame();
-        if (element.id === 'play-again-modal') jQuery('#you-won-modal').modal('toggle');
       });
     });
   },
@@ -305,21 +314,23 @@ const App = {
 
   removeDOMElements: function removeDOMElements() {
     document.getElementById('card-deck').remove();
-    document.getElementById('elapsed-time-counter').remove();
-    document.getElementById('stars-line').remove();
+    document.getElementById('star-line-moves-div').lastChild.remove();
+    document.getElementById('time-elapsed').firstChild.remove();
   },
 
   startGame: function startGame() {
     App.initDeck();
     App.bindCards();
-    App.bindRestart();
+    localStorage.setItem('leoSLmemoryGameFirstMove', true);
   },
 
   endGame: function endGame() {
     App.endCounters();
     App.removeDOMElements();
+    document.getElementById('moves-counter').textContent = '0 Moves';
   },
 };
 //
 
 App.startGame();
+App.bindRestart();
