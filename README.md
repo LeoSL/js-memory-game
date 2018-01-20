@@ -4,7 +4,7 @@
 
 Open `index.html` 🖥 and click in one beautiful squared card to init your Memory Game.
 
-Every two card flipped up, counts one movement. The less movements you make the better you score and hability.
+Every two card flipped up, counts one movement. The less movements you make the better your score and hability are.
 
 ### :question: What the player is to expect from the game
 
