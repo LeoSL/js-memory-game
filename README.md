@@ -17,4 +17,4 @@ Expect a fun way to exercise your memory and a shinny trophy when you won, showi
 ### 👩‍💻 Community resources used to improve game experience
 
 - shuffle function from http://stackoverflow.com/a/2450976 (ES6 converted)
-- fancyTimeFormat function from https://stackoverflow.com/questions/3733227 - ES6 converted
+- fancyTimeFormat function from https://stackoverflow.com/questions/3733227 (ES6 converted)
