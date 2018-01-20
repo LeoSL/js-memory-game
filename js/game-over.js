@@ -1,20 +1,29 @@
 /* globals jQuery window document StarCounter */
 
+/**
+ * Assign jQuery global to a dollar sign convention
+ */
 const $ = jQuery;
 
+/**
+ * Handles the actions triggered after a Memory Game is over
+ */
 const GameOver = {
+  /**
+   * Adds a document listener that calls a winning function
+   */
   initGameOverEventListener: function initGameOverEventListener() {
     document.addEventListener('memoryGameOver', GameOver.youWon);
   },
 
-  // fancyTimeFormat FUNCTION from https://stackoverflow.com/questions/3733227 (ES6 converted) //
+  /**
+   * fancyTimeFormat function from https://stackoverflow.com/questions/3733227 - ES6 converted
+   * @param {Number} totalTime
+   */
   transformTotalTime: function transformTotalTime(totalTime) {
-    // Hours, minutes and seconds
     const hrs = Math.floor(totalTime / 3600);
     const mins = Math.floor((totalTime % 3600) / 60);
     const secs = totalTime % 60;
-
-    // Output like "1:01" or "4:03:59" or "123:03:59"
     let convertedTime = '';
 
     if (hrs > 0) {
@@ -26,6 +35,10 @@ const GameOver = {
     return convertedTime;
   },
 
+  /**
+   * Builds winning modal star rating
+   * @param {Number} starRating
+   */
   buildStarRating: function buildStarRating(starRating) {
     const starLine = StarCounter.createStarLineDOMElement();
     let counter = 0;
@@ -46,6 +59,9 @@ const GameOver = {
     }
   },
 
+  /**
+   * Populates bootstrap modal with game data
+   */
   populateModalData: function populateModalData() {
     const totalMoves = window.MemoryGameCounters.moveCount.moves;
     const totalTime = window.MemoryGameCounters.timer.elapsed;
@@ -56,14 +72,24 @@ const GameOver = {
     GameOver.buildStarRating(starRating);
   },
 
+  /**
+   * Fade in CSS animation to show a shinning trophy
+   */
   fadeInTrophy: function fadeInTrophy() {
     $('.trophy-img').addClass('fade-in');
   },
 
+  /**
+   * Toggles bootstrap modal
+   */
   toggleModal: function toggleModal() {
     $('#you-won-modal').modal('toggle');
   },
 
+  /**
+   * Function called after document received the 'memoryGameOver' event
+   * Triggers bootstrap modal screen appearence, populate is game data and fade in a shinny trophy
+   */
   youWon: function youWon() {
     GameOver.populateModalData();
     GameOver.toggleModal();
