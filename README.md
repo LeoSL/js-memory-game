@@ -1,4 +1,4 @@
-# Memory Game - A Udacity Project
+# JS Memory Game - A Udacity Project
 
 ### 🕹 How the game is played
 
